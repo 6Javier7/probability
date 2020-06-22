@@ -1,0 +1,81 @@
+---
+title: "Exploring the BRFSS data"
+author: "Javier Montaño"
+date: "21 de junio de 2020"
+output: html_document: 
+    fig_height: 4
+    highlight: pygments
+    theme: spacelab
+---
+## Setup
+
+### Load packages
+
+```{r load-packages, message = FALSE}
+library(ggplot2)
+library(dplyr)
+library(tidyverse)
+```
+
+### Load data
+
+
+
+```{r load-data}
+load(".\R\Packages\brfss2013.RData")
+data1 <- brfss2013 %>% select(cvdinfr4, cvdcrhd4, asthma3, havarth3, sleptim1)
+data1$sleptim1 <- gsub("\\b(1|2|3|4|5|6|7)\\b", "Bad Sleepers", data1$sleptim1) #Bad Sleepers
+data1$sleptim1 <- gsub("\\b\\d+\\b", "Good Dreamer", data1$sleptim1) #
+
+```
+
+
+
+* * *
+
+## Part 1: Data
+
+The data come from a phone survey and specificaly some questions about the sleep time and if the person has some illness, i wanna see the proportion of *Good Sleepers* and *Bad Sleepers* for each illness, for "Good Sleepers" i mean people who spend 8 or more hours asleep
+
+* * *
+
+## Part 2: Research questions
+
+**Research quesion 1: What's the proportion of good and bad dreamers with/without Coronary Heart Disease:**
+
+**Research quesion 2: What's the proportion of good and bad dreamers with/without Asthma:**
+
+**Research quesion 3: What's the proportion of good and bad dreamers with/without Arthritis:**
+
+
+* * *
+
+## Part 3: Exploratory data analysis
+
+
+**Research quesion 1: What's the proportion of good and bad dreamers with/without Coronary Heart Disease:**
+
+```{r}
+data2 <- data1 %>% filter(cvdcrhd4 != NA)
+ggplot(data2) + geom_bar(mapping = aes(x = cvdcrhd4, fill = sleptim1), position = fill) + theme_classic() + scale_fill_brewer(palette = "Accent")
+
+```
+
+
+
+**Research quesion 2: What's the proportion of good and bad dreamers with/without Asthma:**
+
+```{r}
+data3 <- data1 %>% filter(asthma3 != NA)
+ggplot(data3) + geom_bar(mapping = aes(x = asthma3, fill = sleptim1), position = fill) + theme_classic() + scale_fill_brewer(palette = "Accent")
+
+```
+
+
+
+**Research quesion 3: What's the proportion of good and bad dreamers with/without Arthritis:**
+
+```{r}
+data4 <- data1 %>% filter(havarth3 != NA)
+ggplot(data4) + geom_bar(mapping = aes(x = havarth3, fill = sleptim1), position = fill) + theme_classic() + scale_fill_brewer(palette = "Accent")
+```
